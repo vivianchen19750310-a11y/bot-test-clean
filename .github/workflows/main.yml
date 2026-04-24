@@ -1,0 +1,28 @@
+name: Google Sheet Automation
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install gspread google-auth google-auth-oauthlib google-auth-httplib2
+
+      - name: Create key.json from secret
+        run: echo "${{ secrets.GOOGLE_CREDENTIALS }}" > key.json
+
+      - name: Run Python script
+        run: python main.py
